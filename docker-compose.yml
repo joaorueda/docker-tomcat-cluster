@@ -1,0 +1,80 @@
+version: '3'
+
+services:
+  tomcat1:
+    container_name: 'tkt1'
+    build: ./tomcat/.
+    networks:
+      mynet:
+        ipv4_address: 172.20.0.5
+    volumes:
+      - ./tomcat/conf/manager.xml:/usr/local/tomcat/webapps/manager/META-INF/context.xml 
+      - ./tomcat/conf/context.xml:/usr/local/tomcat/conf/context.xml
+      - ./tomcat/conf/server.xml:/usr/local/tomcat/conf/server.xml
+      - ./tomcat/conf/web.xml:/usr/local/tomcat/conf/web.xml
+      - ./tomcat/conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ./tomcat/war/meuTeste.war:/usr/local/tomcat/webapps/meuTeste.war
+
+  tomcat2:
+    container_name: 'tkt2'
+    build: ./tomcat/.
+    networks:
+      mynet:
+        ipv4_address: 172.20.0.6
+    volumes: 
+      - ./tomcat/conf/manager.xml:/usr/local/tomcat/webapps/manager/META-INF/context.xml       
+      - ./tomcat/conf/context.xml:/usr/local/tomcat/conf/context.xml
+      - ./tomcat/conf/server.xml:/usr/local/tomcat/conf/server.xml
+      - ./tomcat/conf/web.xml:/usr/local/tomcat/conf/web.xml
+      - ./tomcat/conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ./tomcat/war/meuTeste.war:/usr/local/tomcat/webapps/meuTeste.war
+
+  tomcat3:
+    container_name: 'tkt3'
+    build: ./tomcat/.
+    networks:
+      mynet:
+        ipv4_address: 172.20.0.7
+    volumes: 
+      - ./tomcat/conf/manager.xml:/usr/local/tomcat/webapps/manager/META-INF/context.xml       
+      - ./tomcat/conf/context.xml:/usr/local/tomcat/conf/context.xml
+      - ./tomcat/conf/server.xml:/usr/local/tomcat/conf/server.xml
+      - ./tomcat/conf/web.xml:/usr/local/tomcat/conf/web.xml
+      - ./tomcat/conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ./tomcat/war/meuTeste.war:/usr/local/tomcat/webapps/meuTeste.war
+
+  tomcat4:
+    container_name: 'tkt4'
+    build: ./tomcat/.
+    networks:
+      mynet:
+        ipv4_address: 172.20.0.8
+    volumes: 
+      - ./tomcat/conf/manager.xml:/usr/local/tomcat/webapps/manager/META-INF/context.xml       
+      - ./tomcat/conf/context.xml:/usr/local/tomcat/conf/context.xml
+      - ./tomcat/conf/server.xml:/usr/local/tomcat/conf/server.xml
+      - ./tomcat/conf/web.xml:/usr/local/tomcat/conf/web.xml
+      - ./tomcat/conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ./tomcat/war/meuTeste.war:/usr/local/tomcat/webapps/meuTeste.war
+
+  proxy:
+    container_name: 'prx'
+    image: nginx:1.13
+    networks:
+      mynet:
+        ipv4_address: 172.20.0.4
+    volumes: 
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    restart: always
+    links: 
+      - tomcat1:tomcat1
+      - tomcat2:tomcat2
+      - tomcat3:tomcat3
+      - tomcat4:tomcat4
+
+networks:
+  mynet:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+    
